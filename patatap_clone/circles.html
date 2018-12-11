@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Circles</title>
     <style>
-       html body{
+       body, html{
             height: 100%;
-            margin: 0 0;
+            margin: 0;
         }
 
         #myCanvas{
@@ -16,13 +16,95 @@
         }
     </style>
     <script type="text/javascript" src="_paperjs/paper-full.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
+
+        var keyData = {
+            q: {
+                color: "purple",
+                sound: new Howl({
+                    src: ['_sound/bubbles.mp3']
+                })
+            },
+            w: {
+                color: "green",
+                sound: new Howl({
+                    src: ['_sound/clay.mp3']
+                })
+            },
+            e: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/confetti.mp3']
+                })
+            },
+            r: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/corona.mp3']
+                })
+            },
+            t: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/dotted-spiral.mp3']
+                })
+            },
+            y: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/flash-1.mp3']
+                })
+            },
+            u: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/flash-2.mp3']
+                })
+            },
+            i: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/flash-3.mp3']
+                })
+            },
+            o: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/glimmer.mp3']
+                })
+            },
+            p: {
+                color: "white",
+                sound: new Howl({
+                    src: ['_sound/moon.mp3']
+                })
+            }
+        }
+
+        var circles = [];
         function onKeyDown(event) {
-            var maxPoint = new Point(view.size.width,view.size.height);
-            var randomPoint = Point.random();
-            var point = maxPoint * randomPoint;
-            new Path.Circle(point,10).fillColor = "red";
-            console.log(maxPoint);
+            if(keyData[event.key]){
+                var maxPoint = new Point(view.size.width,view.size.height);
+                var randomPoint = Point.random();
+                var point = maxPoint * randomPoint;
+                var newCircle = new Path.Circle(point,300);
+                newCircle.fillColor = keyData[event.key].color;
+                keyData[event.key].sound.play();
+                circles.push(newCircle);
+            }
+        }
+
+        function onFrame(event){
+            for(var i = 0;i<circles.length;i++){
+                circles[i].fillColor.hue +=1;
+                circles[i].scale(.9);
+                if(circles[i].area<1){
+                    circles[i].remove(); //remove from the canvas
+                    circles.splice(i,1); //remove from array
+                    console.log(circles);
+                }
+            }
         }
     </script>
 </head>
