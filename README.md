@@ -1,2 +1,2 @@
 # teste2
-just testing
+My first github repository, named teste2
